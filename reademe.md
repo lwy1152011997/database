@@ -122,9 +122,83 @@ ALTER DATABASE mydatabase CHARACTER SET[COLLATE 排序规则]
 
 *****************对表的操作**************************
  ## 创建表:
- + 怎么创建(使用DDL):   
+ + 表是一种数据库的对象, 由若干个字段(列)组成
+
+ + 怎么创建(使用DDL, 在创建表之前, 我们需要先使用数据库):   
  ```
- 
+ CREATE TABLE 表名 (字段1 数据类型, 字段2 数据类型, 字段3 数据类型, 字段4 数据类型, ... 数据类型, 字段n 数据类型) 
+ 或者写成:
+ CREATE TABLE 表名 (
+     字段1 数据类型,
+     字段2 数据类型,
+     字段3 数据类型,
+     字段4 数据类型,
+     ... 数据类型,
+     字段 数据类型n
+ )
+
+ 创建一个人的表:
+ CREATE TABLE maiGuaRen (
+     id INT,
+     name VARCHAR(20),
+     age date
+ )
+ ```  
+
+ ## 表中的数据类型:
+ 1. 常见的数据类型:
+    + 数值型  
+    + 字符型  
+    + 日期型  
+ `参考链接: https://blog.csdn.net/Txixi/article/details/115207570`
+
  ```
+ 创建表:  
+ 1. 先创建数据 CREATE DATABASE demodb1
+ 2. 使用数据库 USE demodb1
+ 3. 选择数据库 SELECT DATABASE()
+ 4. 创建表 
+ CREATE TABLE people (
+     id INT,
+     name VARCHAR(20),
+     age date
+ )
+ 5. 查看表
+ ```
+
+ ## 查看表:
++ 查看表: `show tables`  
++ 查看表结构: `DESC 表名`  
++ 查看创建表的SQL语句(也就是这个表是执行什么样的SQL语句创建出来的): `SHOW CREATE TABLE 表名;`  
++ 复制表结构: `CREATE TABLE 新表名 LIKE 旧表名`
+
+## 修改表(主要是修改字段(列)的数据):  
++ 添加新的一列(字段): `ALTER TABLE 表名 ADD 字段 类型`  
++ 修改列(字段)的名: `ALTER TABLE 表名 CHANGE 旧字段 新字段 类型`  
++ 修改列(字段)的类型: `ALTER TABLE 表名 MODIFY 字段 新类型`  
++ 删除指定列(字段): `ALTER TABLE 表名 DROP 列名`  
+
++ 修改表名: `RENAME TABLE 表名 TO 新表名`  
++ 删除表: `DROP TABLE 表名`  
+
+## DML语句对表的操作: 
+`解释: DML语句 是对 表中的数据进行 增 删 改 的操作`
+1. 增:  
+    + 将指定字段插入表中(key-value 需要一一对应): INSERT INTO 表名 (字段1, 字段2, 字段3...) VALUES (1值, 2值, 3值...)  
+    + 不指定字段插入表中(顺序和创建的表的字段顺序一一对应): INSERT INTO 表名 VALUES (1值, 2值, 3值...)  
+
+2. 复制数据:  
+    + INSERT INTO 表名a SELECT * FROM 表名b
+
+3. 改(更新):  
+    + 不带更新条件(整个列的值都会变): `UPDATE 表名 SET 字段1=值1,字段2=值2,字段3=值3...`  
+    + 带条件的: `UPDATE 表名 SET 字段1=值1 WHERE 条件`
+
+4. 删:  
+    + 带条件的: `DELETE FROM 表名 WHERE 条件`  
+    + 不带条件的: `DELETE FROM 表名`  
+
+## DQL语句对表的查询: 
+todo...补充
 
 # NESTJS基础
