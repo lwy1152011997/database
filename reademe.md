@@ -141,7 +141,7 @@ ALTER DATABASE mydatabase CHARACTER SET[COLLATE 排序规则]
  CREATE TABLE maiGuaRen (
      id INT,
      name VARCHAR(20),
-     age date
+     age INT
  )
  ```  
 
@@ -199,6 +199,104 @@ ALTER DATABASE mydatabase CHARACTER SET[COLLATE 排序规则]
     + 不带条件的: `DELETE FROM 表名`  
 
 ## DQL语句对表的查询: 
-todo...补充
+1. 是干嘛的?  
+用来查询数据库中的数据, 不会对数据库的内容进行修改, 可理解为仅是一个get操作  
+
+2. 简单查询:  
+     + 查询表中的全部数据(查询表中的所有列): `SELECT * from 表名`  
+     + 查询指定字段(有限使用这种): `SELECT 字段1, 字段2,字段3,... FROM 表名`  
+     + 别名查询(给列或者表取个名, 好处是方便查看和处理查到的数据):  
+     `SELECT 字段名1 AS 别名1, 字段名2 AS 别名2,... FROM 表名`  
+     `SELECT 字段名1 AS 别名1, 字段名2 AS 别名2,... FROM 表名 AS 别名`  
+     ```
+     AS 可以省略
+     SELECT name AS myname FROM people
+     省略: SELECT name 'myname' FROM people
+     // 表取别名一般是在多表进行联查的时候用到, 现在我暂时还不会, 后续再补充
+     ```  
+
+3. 去除重复数据:  
+    ```
+    再查询某个指定的字段时,它的值可能会有多个相同的, 默认查询的时候都会全部显示出来
+    确认数据是否重复,需要指定列的维度来进行确认
+
+    语法:
+        SELECT DISTINCT 字段1,字段2,... FROM 表名
+    ```  
+
+ 4. 将查询结果参与运算:  
+    ```
+    就是将查询结果的列中的可进行计算的值进行 加减乘除数学操作, 这个操作不会影响数据库中的存储数据, 只会影响展示结果
+
+    语法:  
+        SELECT 列名1 +固定值 FROM 表名  单列计算
+        SELECT 列名1 + 列名2 FROM 表名 多列计算
+    
+    exp:  
+         SELECT age-10 FROM people;
+         SELECT moeny + nomoeny FROM people;
+    ```
+
+ ## 条件查询(WHERE):  
+1. 比较运算符:  
+    + 等于 =  
+    + 大于 >  
+    + 小于 <  
+    + 大于等于 >=  
+    + 小于等于 <=  
+    + <> 和 != 表示不等于  
+    + `语法: SELECT * FROM 表名 WHERE 查询条件`
+    查询全部身上的钱多余10块的: `SELECT * FROM people WHERE money > 10`  
+
+2. 逻辑运算:  
+    + AND(&&) 多个条件同时满足  
+    + OR(||) 满足其中一个  
+    + NOT(!) 不满足  
+    + `语法: SELECT * FROM people WHERE money>10 AND age>20`  
+
+3. 指定查询范围:  
+    `关键字: IN BETWEEN`
+    `语法: SELECT 字段名 FROM 表名 WHERE 字段 IN (数据1, 数据2, ...)`  
+    ```
+    解释: IN的使用类似于查询的条件使用了多个 OR 进行连接
+    例:
+    查询 身上有10 20 30 块钱的人:
+    SELECT * FROM people WHERE money IN (10, 20 ,30);
+
+    查询 身上没有10 20 30 块钱的人:
+    SELECT * FROM people WHERE money NOT IN (10, 20 ,30);
+
+    查询岁数20~30岁的人:
+    SELECT * FROM people WHERE age>=20 AND age<= 30;
+    SELECT * FROM people WHERE age BETWEEN 20 AND 30;
+    ```  
+
+4. 模糊查询:  
+    `语法: SELECT * FROM 表名 WHERE 字段 LIKE '通配符字符串'`  
+    通配符:  
+    + % 表示任意个字符匹配
+    ```
+    %号的解释:  
+    比如要匹配 NBA CBA CUBA WNBA WCBA NCAA 这几项
+    %A 此时的%匹配了A的左边的0~N个字符 就能找到6个结果
+    AA% 此时以AA开始为基础匹配进行匹配, 以上没有以AA开始的所以为0个结果
+    %N% 当中只要包含N都能就行匹配 3个结果;
+    ```
+    + _ 标识语个字符匹配  
+    ```
+    _号的解释:
+    比如要匹配 NBA CBA CUBA WNBA WCBA NCAA 这几项
+    我要匹配 NBA
+    SELECT * FROM people WHERE name LIKE '_BA' 只能匹配到 NBA CBA 一个_就是一个字符
+    ```
+    
+    ```
+    示例:  
+    查询姓刘的人:  
+    SELECT * FROM people WHERE name LIKE '刘%'
+
+    查询名字中包含文的人:  
+    SELECT * FROM people WHERE name LIKE '%文%'
+    ```
 
 # NESTJS基础
